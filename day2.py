@@ -1,4 +1,4 @@
-VALUES = {
+MOVE_VALUES = {
     "X": 1,
     "Y": 2,
     "Z": 3,
@@ -7,7 +7,7 @@ VALUES = {
     "C": 3,
 }
 
-MAPPINGS = {
+PART_TWO_CHEAT_SHEET = {
     ("A", "X"): 3,
     ("A", "Y"): 4,
     ("A", "Z"): 8,
@@ -21,11 +21,11 @@ MAPPINGS = {
 
 
 def determine_move_score(move):
-    if VALUES[move[1]] == VALUES[move[0]]:
-        return 3 + VALUES[move[1]]
-    elif any(move == wm for wm in (["C", "X"], ["A", "Y"], ["B", "Z"])):
-        return 6 + VALUES[move[1]]
-    return VALUES[move[1]]
+    if MOVE_VALUES[move[1]] == MOVE_VALUES[move[0]]:
+        return 3 + MOVE_VALUES[move[1]]
+    elif any(move == wm for wm in (("C", "X"), ("A", "Y"), ("B", "Z"))):
+        return 6 + MOVE_VALUES[move[1]]
+    return MOVE_VALUES[move[1]]
 
 
 def read_input_file(file_path) -> str:
@@ -34,21 +34,16 @@ def read_input_file(file_path) -> str:
 
 
 def determine_moves(file_input: str):
-    return [line.split(" ") for line in file_input.split("\n")]
+    return [tuple(line.split(" ")) for line in file_input.split("\n")]
 
 
-def determine_player_score(moves) -> int:
+def part_one(moves) -> int:
     scores = [determine_move_score(move) for move in moves]
     return sum(scores)
 
 
-def determine_part_two_score(move) -> int:
-    return MAPPINGS[move]
-
-
 def part_two(moves) -> int:
-    scores = [determine_part_two_score(tuple(move)) for move in moves]
-    return sum(scores)
+    return sum([PART_TWO_CHEAT_SHEET[move] for move in moves])
 
 
 def main() -> None:
@@ -57,7 +52,7 @@ def main() -> None:
     """
     file_input = read_input_file("resources/day2.txt")
     moves = determine_moves(file_input)
-    print(determine_player_score(moves))
+    print(part_one(moves))
     print(part_two(moves))
 
 
