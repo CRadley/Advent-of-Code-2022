@@ -38,8 +38,7 @@ def determine_moves(file_input: str):
 
 
 def part_one(moves) -> int:
-    scores = [determine_move_score(move) for move in moves]
-    return sum(scores)
+    return sum([determine_move_score(move) for move in moves])
 
 
 def part_two(moves) -> int:
