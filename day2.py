@@ -1,32 +1,14 @@
 MOVE_VALUES = {
-    "X": 1,
-    "Y": 2,
-    "Z": 3,
-    "A": 1,
-    "B": 2,
-    "C": 3,
+    ("A", "X"): (4, 3),
+    ("B", "X"): (1, 1),
+    ("C", "X"): (7, 2),
+    ("A", "Y"): (8, 4),
+    ("B", "Y"): (5, 5),
+    ("C", "Y"): (2, 6),
+    ("A", "Z"): (3, 8),
+    ("B", "Z"): (9, 9),
+    ("C", "Z"): (6, 7),
 }
-
-PART_TWO_CHEAT_SHEET = {
-    ("A", "X"): 3,
-    ("A", "Y"): 4,
-    ("A", "Z"): 8,
-    ("B", "X"): 1,
-    ("B", "Y"): 5,
-    ("B", "Z"): 9,
-    ("C", "X"): 2,
-    ("C", "Y"): 6,
-    ("C", "Z"): 7,
-}
-
-
-def determine_move_score(move):
-    if MOVE_VALUES[move[1]] == MOVE_VALUES[move[0]]:
-        return 3 + MOVE_VALUES[move[1]]
-    elif any(move == wm for wm in (("C", "X"), ("A", "Y"), ("B", "Z"))):
-        return 6 + MOVE_VALUES[move[1]]
-    return MOVE_VALUES[move[1]]
-
 
 def read_input_file(file_path) -> str:
     with open(file_path, encoding="utf-8") as input_file:
@@ -36,13 +18,15 @@ def read_input_file(file_path) -> str:
 def determine_moves(file_input: str):
     return [tuple(line.split(" ")) for line in file_input.split("\n")]
 
+def determine_player_score(move, decrypt = False):
+    return MOVE_VALUES[move][decrypt]
 
 def part_one(moves) -> int:
-    return sum([determine_move_score(move) for move in moves])
+    return sum([determine_player_score(move) for move in moves])
 
 
 def part_two(moves) -> int:
-    return sum([PART_TWO_CHEAT_SHEET[move] for move in moves])
+    return sum([determine_player_score(move, decrypt=True) for move in moves])
 
 
 def main() -> None:
