@@ -23,7 +23,7 @@ def parse_moves(input_moves):
     return [list(map(int, re.findall(r"[0-9]+", row))) for row in input_moves]
 
 def execute_moves(stack, moves, is_over_9000):
-    stack_mutate = [s for s in stack]
+    stack_mutate = [s[:] for s in stack]
     for num, start, end in moves:
         for i in range(num):
             crate = stack_mutate[start - 1].pop(0)
@@ -39,11 +39,8 @@ def main() -> None:
     stack = parse_stack(unparsed_stack)
     moves = parse_moves(unparsed_moves)
     part_one_value = execute_moves(stack, moves, False)
-    print(part_one_value)
-
-    # Need to redefine for w/e reason
-    stack = parse_stack(unparsed_stack)
     part_two_value = execute_moves(stack, moves, True)
+    print(part_one_value)
     print(part_two_value)
 
 
