@@ -21,10 +21,9 @@ def part_one(commands, max_cycles) -> int:
     mid_addx_cycle = False
     pixels = ["."] * 240
     for i in range(1, max_cycles + 1):
-        current_sprite_pixels = [signal_strength - 1,
-                                 signal_strength, signal_strength + 1]
         current_sprite_pixels = list(
-            filter(lambda x: 0 <= x <= 40, current_sprite_pixels))
+            filter(lambda x: 0 <= x < 40, [signal_strength - 1,
+                                           signal_strength, signal_strength + 1]))
         current_row = i // 40
         for sp in current_sprite_pixels:
             if i - (current_row * 40) - 1 == sp:
