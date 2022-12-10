@@ -24,8 +24,7 @@ def part_one(commands, max_cycles) -> int:
         current_sprite_pixels = [signal_strength - 1,
                                  signal_strength, signal_strength + 1]
         current_sprite_pixels = list(
-            filter(lambda x: 0 <= x < 40, current_sprite_pixels))
-        print(current_sprite_pixels)
+            filter(lambda x: 0 <= x <= 40, current_sprite_pixels))
         current_row = i // 40
         for sp in current_sprite_pixels:
             if i - (current_row * 40) - 1 == sp:
