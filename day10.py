@@ -17,25 +17,24 @@ def determine_commands(file_input):
 def part_one(commands, max_cycles) -> int:
     IMPORTANT_CYCLES = (20, 60, 100, 140, 180, 220)
     important_cycles_values = []
-    signal_strength = 1
+    x = 1
     mid_addx_cycle = False
     pixels = ["."] * 240
     for i in range(1, max_cycles + 1):
         current_sprite_pixels = list(
-            filter(lambda x: 0 <= x < 40, [signal_strength - 1,
-                                           signal_strength, signal_strength + 1]))
+            filter(lambda y: 0 <= y < 40, [x - 1, x, x + 1]))
         current_row = i // 40
         for sp in current_sprite_pixels:
             if i - (current_row * 40) - 1 == sp:
                 pixels[i - 1] = "#"
         if i in IMPORTANT_CYCLES:
-            important_cycles_values.append(signal_strength * i)
+            important_cycles_values.append(x * i)
         if not mid_addx_cycle:
             command = next(commands, ())
         if len(command) == 2:
             if mid_addx_cycle:
                 mid_addx_cycle = False
-                signal_strength += command[1]
+                x += command[1]
             else:
                 mid_addx_cycle = True
     return sum(important_cycles_values), pixels
