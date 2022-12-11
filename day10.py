@@ -24,6 +24,7 @@ def part_one(commands, max_cycles) -> int:
         current_sprite_pixels = list(
             filter(lambda y: 0 <= y < 40, [x - 1, x, x + 1]))
         current_row = i // 40
+        print(current_row)
         for sp in current_sprite_pixels:
             if i - (current_row * 40) - 1 == sp:
                 pixels[i - 1] = "#"

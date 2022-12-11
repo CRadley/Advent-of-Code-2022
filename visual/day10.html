@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet">
+    <title>Day 10 AoC 2022</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: 'Source Code Pro', monospace;
+        }
+        h1 {
+            color: #fff;
+        }
+        body {
+            background-color: #292b2b;
+            width: 100vw;
+            height: 100vh;
+        }
+        main {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            padding: 10px;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        .crt {
+            aspect-ratio: 16/3;
+            width: 50%;
+            background-color: palegoldenrod;
+            grid-template-columns: repeat(40, 1fr);   
+            grid-template-rows: repeat(6, 1fr);
+            display: grid;
+            border-radius: 5px;
+            border: darkgray 5px solid;
+        }
+
+        .crt-cell {
+            border: #292b2b 1px solid;
+        }
+        
+        .sprite {
+            background-color: darkolivegreen;
+        }
+        
+        .active {
+            background-color: #292b2b;
+            
+        }
+        .x {
+            border: crimson solid 2px;
+            
+        }
+        #puzzle-input-form {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #puzzle-input {
+            resize: none;
+            height: 50vh;
+            border-radius: 5px;
+            background-color: #292b2b;
+            border: none;
+            outline: none;
+            color: #fff;
+            filter: drop-shadow(0px 2px 3px #000);
+            padding: 1rem;
+            transition: all linear 200ms;
+        }
+
+        #puzzle-input:focus {
+            filter: drop-shadow(0px 2px 3px palegoldenrod);
+        }
+
+        #puzzle-input-button {
+            height: 32px;
+            background-color: palegoldenrod;
+            border: none;
+            cursor: pointer;
+            transition: all linear 100ms;
+            border-radius: 5px;
+        }
+        #puzzle-input-button:hover {
+            opacity: 90%;
+        }
+        #puzzle-input-button:active {
+            transform: translateY(1px);
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Advent of Code 2022: Day 10</h1>
+        <form id="puzzle-input-form">
+            <textarea id="puzzle-input"></textarea>
+            <button type="submit" id="puzzle-input-button">Solve</button>
+        </form>
+        <div class="crt" id="crt"></div>
+    </main>
+    <script>
+        const puzzleInputForm = document.getElementById("puzzle-input-form");
+        const puzzleInput = document.getElementById("puzzle-input");
+        const puzzleInputSubmit = document.getElementById("puzzle-input-button");
+        
+        puzzleInput.value = ""; // Reset the value
+        const crt = document.getElementById("crt");
+        for (let i = 0; i < 240; i ++) {
+            let crtCell = document.createElement("div");
+            crtCell.className = "crt-cell"
+            crt.appendChild(crtCell)
+        }
+        commandsGenerator = function*(puzzleInput) {
+            const commands = puzzleInput.split("\n").map((line) => line.split(" "))
+            for (let command of commands) {
+                yield command;
+            }
+        }
+        const sleep = (ms) => {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        puzzleInputForm.addEventListener("submit", async (event) => {
+            try {
+                for (let child of crt.children) {
+                    child.classList = ["crt-cell"]
+                }
+                puzzleInputSubmit.disabled = true;
+                event.preventDefault();
+                const commands = commandsGenerator(puzzleInput.value)
+                let command;
+                let midAddX = false
+                let x = 1;
+                for (let i = 1; i < 241; i ++) {
+                    crt.children[i - 1].classList.add("x")
+                    let currentSpritePixels = [x - 1, x, x + 1].filter(value => 0 <= value && value < 40);
+                    let currentRow = Math.floor((i - 1)/40);
+                    for (let csp of currentSpritePixels) {
+                        console.log(csp, csp+(currentRow * 40))
+                        crt.children[csp + (currentRow * 40)].classList.add("sprite")
+                        if ((i - (currentRow * 40) - 1) == csp) {
+                            crt.children[i - 1].classList.add("active")
+                        }
+                    }
+                    // await sleep(75);
+                    if (!midAddX) command = commands.next();
+                    if (command.value.length == 2) {
+                        if (midAddX) {  
+                            midAddX = false
+                            x += parseInt(command.value[1]);
+                        } else {
+                            midAddX = true
+                        }
+                    }
+                    crt.children[i - 1].classList.remove("x")
+                    for (let csp of currentSpritePixels) {
+                        crt.children[csp + (currentRow * 40)].classList.remove("sprite")
+                    }
+                }
+            } catch (err) {
+                window.alert(err.toString())
+            } finally {
+                puzzleInputSubmit.disabled = false;
+
+            }
+        })
+    </script>
+</body>
+</html>
