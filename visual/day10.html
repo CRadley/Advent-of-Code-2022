@@ -282,7 +282,6 @@ noop`
                     let currentSpritePixels = [x - 1, x, x + 1].filter(value => 0 <= value && value < 40);
                     let currentRow = Math.floor((i - 1)/40);
                     for (let csp of currentSpritePixels) {
-                        console.log(csp, csp+(currentRow * 40))
                         crt.children[csp + (currentRow * 40)].classList.add("sprite")
                         if ((i - (currentRow * 40) - 1) == csp) {
                             crt.children[i - 1].classList.add("active")
