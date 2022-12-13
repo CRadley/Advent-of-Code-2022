@@ -35,8 +35,7 @@ def is_correct_order(left_packet, right_packet):
 def part_one(packets):
     total = 0
     for i, packet in enumerate(packets):
-        valid = is_correct_order(*packet)
-        if valid:
+        if is_correct_order(*packet):
             total += i + 1
     return total
 
