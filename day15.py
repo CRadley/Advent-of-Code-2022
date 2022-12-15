@@ -59,6 +59,10 @@ def find_intersection(line_1, line_2):
     return (px, py)
 
 
+def is_within_bounds(pos):
+    return 0 <= pos[0] <= 4000000 and 0 <= pos[1] <= 4000000
+
+
 def part_two(positions):
     lines = []
     for sx, sy, bx, by in positions:
@@ -76,9 +80,8 @@ def part_two(positions):
             i = find_intersection(line, other)
             if i:
                 intersections.append(i)
-    counts = Counter(filter(lambda pos: 0 <=
-                            pos[0] <= 4000000 and 0 <= pos[1] <= 4000000, intersections))
-    for i in counts:
+    intersections = filter(is_within_bounds, intersections)
+    for i in set(intersections):
         if all(manhatten_distance(sx, sy, bx, by) < manhatten_distance(sx, sy, i[0], i[1]) for sx, sy, bx, by in positions):
             return i[0] * 4000000 + i[1]
 
